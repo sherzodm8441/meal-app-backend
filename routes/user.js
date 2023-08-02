@@ -6,22 +6,6 @@ router.get("/user", (req, res)=>{
     res.send("user working");
 })
 
-router.post("/user", async (req, res)=> {
-    const newUser = new User({
-        username: req.body.username,
-        password: req.body.password,
-    })
-
-    try{
-        const savedUser = await newUser.save();
-        console.log(savedUser);
-        res.status(201).json(savedUser);
-    }catch(error){
-        console.log(error);
-        res.status(500).json(error);
-    }
-})
-
 router.put("/user/:id", async (req, res)=> {
     try{
         const user = await User.findOneAndUpdate(

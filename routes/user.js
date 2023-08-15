@@ -2,21 +2,21 @@ const router = require("express").Router();
 const User = require("../models/User");
 const verifyJWTToken = require("./verifyJWTToken");
 
-router.get("/user", (req, res)=>{
-    console.log("/user endpoint")
-    res.send("user working");
-})
+// router.get("/user", (req, res)=>{
+//     console.log("/user endpoint")
+//     res.send("user working");
+// })
 
 //UPDATE
-router.put("/user/:id", verifyJWTToken, async (req, res)=> {
-    console.log(req.user.id);
+router.put("/user", verifyJWTToken, async (req, res)=> {
     try{
-        const user = await User.findOneAndUpdate(
-            {_id: req.params.id}, //search by
-            req.body, //data bto be inserted
+        const user = await User.findByIdAndUpdate(
+            req.user.id, //pass in id
+            {$set: req.body}, //data bto be inserted
             {new: true} //return updated copy
         )
-        res.status(200).json(user);
+        const {password, ...others} = user._doc;
+        res.status(200).json({...others});
     }catch(error){
         res.status(404).json(error);
     }

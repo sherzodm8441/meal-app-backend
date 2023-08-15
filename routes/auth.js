@@ -11,8 +11,8 @@ router.post("/user", async (req, res)=> {
             password: hashedPassword,
         })
         const savedUser = await newUser.save();
-        console.log(savedUser);
-        res.status(201).json(savedUser);
+        const { password, ...others} = savedUser._doc
+        res.status(201).json(others);
     }catch(error){
         console.log(error);
         res.status(500).json(error);
